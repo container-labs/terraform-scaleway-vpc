@@ -6,9 +6,12 @@
 resource "scaleway_vpc_private_network" "main" {
   # for_each = toset([local.zones])
   name = var.name
+  tags = [for k, v in var.tags : "${k}::${v}"]
+  zone = local.zone
 }
 
 resource "scaleway_vpc_public_gateway_ip" "main" {
+  zone = local.zone
 }
 
 # https://www.scaleway.com/en/docs/compute/instances/how-to/use-private-networks/#how-to-configure-the-private-network-interface-on-your-instances
@@ -18,6 +21,7 @@ resource "scaleway_vpc_public_gateway_ip" "main" {
 resource "scaleway_vpc_public_gateway_dhcp" "main" {
   subnet             = "192.168.1.0/24"
   push_default_route = true
+  zone               = local.zone
 }
 
 # The VPC Public Gateway is a building block for your infrastructure
@@ -27,6 +31,7 @@ resource "scaleway_vpc_public_gateway" "main" {
   name  = var.name
   type  = "VPC-GW-S"
   ip_id = scaleway_vpc_public_gateway_ip.main.id
+  zone  = local.zone
 }
 
 # A Gateway Network represents the connection of a Private Network
@@ -38,5 +43,5 @@ resource "scaleway_vpc_gateway_network" "main" {
   dhcp_id            = scaleway_vpc_public_gateway_dhcp.main.id
   cleanup_dhcp       = true
   enable_masquerade  = true
-  zone               = local.zones[0]
+  zone               = local.zone
 }

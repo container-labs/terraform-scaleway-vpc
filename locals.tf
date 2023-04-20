@@ -11,5 +11,7 @@ locals {
     "pl-waw" = ["pl-waw-1"]
   }
   multi_zone = false
-  zones      = local.multi_zone ? local.region_to_zones[var.region] : local.region_to_zone[var.region]
+
+  zone  = local.region_to_zones[var.region][0]
+  zones = local.multi_zone ? local.region_to_zones[var.region] : local.region_to_zone[var.region]
 }
