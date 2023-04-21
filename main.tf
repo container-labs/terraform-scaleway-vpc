@@ -1,6 +1,7 @@
 # https://registry.terraform.io/providers/scaleway/scaleway/latest/docs/resources/vpc_gateway_network
 
-# TODO: multi-zone support
+# TODO: multi-zone support, when this is out of beta
+# https://www.scaleway.com/en/docs/network/vpc/concepts/#regional-private-networks
 # only supporting one zone in a region for now
 # the "default" zone is the only one that can be used to peer with databases
 resource "scaleway_vpc_private_network" "main" {
